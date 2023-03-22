@@ -1,0 +1,17 @@
+dist: xenial
+language: java
+sudo: false
+jdk: openjdk17
+install: true
+addons:
+  sonarcloud:
+    organization: $SONAR_ORGANIZATION
+    token: $SONAR_TOKEN
+script:
+  - mvn clean package sonar:sonar -P sonar
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package org.jacoco:jacoco-maven-plugin:report
+  - if [ "$JAVA_HOME" = "/usr/local/lib/jvm/openjdk11" ]; then mvn sonar:sonar; fi
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.sonar/cache'
